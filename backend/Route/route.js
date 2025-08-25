@@ -13,6 +13,7 @@ const { deleteUser } = require('../controlers/user/deleteUser');
 const { ratting } = require('../controlers/UserActions/rattingUpdateRoute');
 const { reach } = require('../controlers/UserActions/reachUpdateRoute');
 const { review } = require('../controlers/UserActions/reviewUpdateRoute');
+const { getSpecificUserDetail } = require('../controlers/user/getSpecificUserDetail');
  router.get('/',(req,res)=>{
     res.send('Hello World');
 });
@@ -29,8 +30,10 @@ router.put('/change-password/:id',authGuard,ChangePassword);
 router.get('/get-user-detail',authGuard,getUserDetail);
 router.put('/update-user/:id',authGuard,updateUser);
 router.delete('/delete-user/:id',authGuard,deleteUser);
+router.get('/get-specific-user-detail/:id',authGuard,getSpecificUserDetail);
 
 // user action like review, ratting, reach
+//*************  for avg ratting frontend under useMemo it calculate ***************
 router.put('/ratting/:id',authGuard,ratting);
 router.put('/reach/:id',authGuard,reach);
 router.put('/review/:id',authGuard,review);

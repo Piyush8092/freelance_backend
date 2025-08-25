@@ -73,6 +73,10 @@ reach:[{
         },
         reeview:{
             type: String,
+        },
+        image:{
+            type: String,
+            default: ''
         }
      }]
 
