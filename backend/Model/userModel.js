@@ -51,7 +51,7 @@ const userSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'user'
     },
-        reachNo:{
+        rattingNo:{
             type: Number,
             default: 0
         }

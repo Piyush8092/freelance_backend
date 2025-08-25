@@ -6,11 +6,14 @@ const User = require('../../Model/userModel');
 const ChangePassword = async (req, res) => {
     try {
         let payload = req.body;
+        let userId=req.params.id;
         let authUserId=req.user._id;
         if(!authUserId){
             return res.status(400).json({ message: 'Invalid credentials' });
         }
-    
+    if(userId!=authUserId){
+            return res.status(400).json({ message: 'Invalid credentials' });
+        }
         if(payload.password!=payload.confirmPassword) {
             return res.status(400).json({ message: 'Password  invalid credentials' });
         }
