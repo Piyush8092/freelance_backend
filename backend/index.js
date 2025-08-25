@@ -6,7 +6,8 @@ const connectDB=require('./DB/connection');
 const port=process.env.PORT || 3000;
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
-
+const passport = require('passport');
+ 
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(cookieParser());

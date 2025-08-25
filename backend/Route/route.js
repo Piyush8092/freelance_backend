@@ -14,6 +14,10 @@ const { ratting } = require('../controlers/UserActions/rattingUpdateRoute');
 const { reach } = require('../controlers/UserActions/reachUpdateRoute');
 const { review } = require('../controlers/UserActions/reviewUpdateRoute');
 const { getSpecificUserDetail } = require('../controlers/user/getSpecificUserDetail');
+const passport = require('passport');
+
+route.use(passport.initialize());
+
  router.get('/',(req,res)=>{
     res.send('Hello World');
 });
@@ -25,6 +29,36 @@ router.post('/login',LoginRout);
 router.post('/change-password',ChangePassword);
 router.post('/logout',LogoutRout);
 router.put('/change-password/:id',authGuard,ChangePassword);
+// for google signup/login
+ // for jwt tokon integression with google auth20
+route.get('/auth/google',
+  passport.authenticate('google', { scope: ['email','profile'] }));
+  
+// this req send frontend rouet => this route call from utiles/googleAuth.js automatic
+ 
+route.get('/auth/google/callback', 
+  passport.authenticate('google', { session: false, failureRedirect: 'http://localhost:3000/login' }),
+  (req, res) => {
+          const user = req.user;
+
+    // JWT creation
+    const token = jwt.sign({ _id: user._id, email: user.email }, '3y2yxhx829299292hc2rhh9h2rhcj9j2rj9r9rj92', { expiresIn: '30d' });
+
+    // Set the JWT in a secure cookie
+    res.cookie('jwt', token, {
+      httpOnly: true,
+      secure: false, // set to true in production (HTTPS)
+      sameSite: 'Lax',
+    });
+
+    // // Redirect to frontend
+    res.redirect('http://localhost:3000/home');
+  }
+);
+
+
+
+
 
 // user detail
 router.get('/get-user-detail',authGuard,getUserDetail);
