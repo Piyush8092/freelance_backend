@@ -5,6 +5,7 @@ const updateUser = async (req, res) => {
         let id = req.params.id;
         let payload = req.body;
         let ExistUser = await userModel.findById(id);
+        
         if (!ExistUser) {
             return res.status(404).json({message: 'User not found'});
         }

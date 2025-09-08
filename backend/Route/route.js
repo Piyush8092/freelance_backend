@@ -15,8 +15,14 @@ const { reach } = require('../controlers/UserActions/reachUpdateRoute');
 const { review } = require('../controlers/UserActions/reviewUpdateRoute');
 const { getSpecificUserDetail } = require('../controlers/user/getSpecificUserDetail');
 const passport = require('passport');
+const { createCampaign } = require('../controlers/campaign/createCampaign');
+const { getAllCampaigns } = require('../controlers/campaign/getAllCampaign');
+const { getSpecificCampaign } = require('../controlers/campaign/getSpecificCampaign');
+const { queryCampaigns } = require('../controlers/campaign/getQueryCampaign');
+const { updateCampaign } = require('../controlers/campaign/updateCampaign');
+const { deleteCampaign } = require('../controlers/campaign/deleteCampaign');
 
-route.use(passport.initialize());
+router.use(passport.initialize());
 
  router.get('/',(req,res)=>{
     res.send('Hello World');
@@ -29,20 +35,21 @@ router.post('/login',LoginRout);
 router.post('/change-password',ChangePassword);
 router.post('/logout',LogoutRout);
 router.put('/change-password/:id',authGuard,ChangePassword);
+
 // for google signup/login
  // for jwt tokon integression with google auth20
-route.get('/auth/google',
+router.get('/auth/google',
   passport.authenticate('google', { scope: ['email','profile'] }));
-  
+
 // this req send frontend rouet => this route call from utiles/googleAuth.js automatic
  
-route.get('/auth/google/callback', 
+router.get('/auth/google/callback', 
   passport.authenticate('google', { session: false, failureRedirect: 'http://localhost:3000/login' }),
   (req, res) => {
           const user = req.user;
 
     // JWT creation
-    const token = jwt.sign({ _id: user._id, email: user.email }, '3y2yxhx829299292hc2rhh9h2rhcj9j2rj9r9rj92', { expiresIn: '30d' });
+    const token = jwt.sign({ _id: user._id, email: user.email },process.env.SECRET_KEY || '3y2yxhx829299292hc2rhh9h2rhcj9j2rj9r9rj92', { expiresIn: '30d' });
 
     // Set the JWT in a secure cookie
     res.cookie('jwt', token, {
@@ -56,7 +63,12 @@ route.get('/auth/google/callback',
   }
 );
 
-
+// for frontend call
+// for gooogle sign up
+// let handelGoogleSignup=()=>{
+//       window.location.href = 'http://localhost:8000/auth/google';
+      
+// }
 
 
 
@@ -66,11 +78,19 @@ router.put('/update-user/:id',authGuard,updateUser);
 router.delete('/delete-user/:id',authGuard,deleteUser);
 router.get('/get-specific-user-detail/:id',authGuard,getSpecificUserDetail);
 
-// user action like review, ratting, reach
-//*************  for avg ratting frontend under useMemo it calculate ***************
-router.put('/ratting/:id',authGuard,ratting);
-router.put('/reach/:id',authGuard,reach);
-router.put('/review/:id',authGuard,review);
+// user action campaign
+router.put('/create-campaign',authGuard,createCampaign);
+router.get('/get-all-campaign',getAllCampaigns);
+router.get('/get-specific-campaign/:id',getSpecificCampaign);
+router.get('/get-query-campaign',queryCampaigns);
+router.put('/update-campaign/:id',authGuard,updateCampaign);
+router.delete('/delete-campaign/:id',authGuard,deleteCampaign);
+
+
+
+// colaboration apis
+
+ 
 
 
 

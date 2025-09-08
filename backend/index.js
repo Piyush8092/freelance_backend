@@ -7,7 +7,13 @@ const port=process.env.PORT || 3000;
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const passport = require('passport');
+const influencerRoute = require('./Route/influncerRoute');
+const clientRoute = require('./Route/clientRoute');
  
+
+
+ app.use(passport.initialize());
+
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(cookieParser());
@@ -20,6 +26,8 @@ app.use(cors({
 
 
 app.use('/api',router);
+app.use('/api/infulencer',influencerRoute);
+app.use('/api/client',clientRoute);
 
  connectDB();
 app.listen(port,()=>{
