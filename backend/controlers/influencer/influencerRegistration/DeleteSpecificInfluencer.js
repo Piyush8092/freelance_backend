@@ -13,7 +13,7 @@ const DeleteSpecificInfluencer = async (req, res) => {
         }
 
         // Check ownership
-        if (ExistInfluencer.userId.toString() !== userId.toString()) {
+        if (ExistInfluencer.userId.toString() !== userId.toString() && req.user.role!=='ADMIN') {
             return res.status(403).json({message: 'Unauthorized access'});
         }
          

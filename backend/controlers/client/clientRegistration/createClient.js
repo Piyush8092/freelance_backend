@@ -8,8 +8,7 @@ const CreateClient = async (req, res) => {
     if (
       !payload.profileImage ||
       !payload.selectCategory ||
-      !payload.email ||
-      payload.allowCallInApp === undefined ||
+       payload.allowCallInApp === undefined ||
       payload.allowCallViaPhone === undefined ||
       payload.allowChat === undefined
     ) {

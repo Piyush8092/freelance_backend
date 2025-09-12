@@ -19,13 +19,14 @@ const { getAcceptJob } = require('../controlers/client/ApplyInfluencer/GetAccept
 const { getAllClient } = require('../controlers/client/clientRegistration/getAllCilent');
 const { getSpecificClient } = require('../controlers/client/clientRegistration/getSpecificClient');
 const { getQueryClient } = require('../controlers/client/clientRegistration/getQueryCilent');
+const { getAllJobApplication } = require('../controlers/client/ApplyInfluencer/GetAllJobApplicaion');
   cookie();
 
 //  create client request
-clientRoute.post('/create-client',authGuard,CreateClient)
+clientRoute.post('/create-client',authGuard,CreateClient);
 clientRoute.get('/client-query',queryClients);
-clientRoute.put('/update-client',authGuard,UpdateSpecificClient);
-clientRoute.delete('/delete-client',authGuard,DeleteSpecificClient);
+clientRoute.put('/update-client/:id',authGuard,UpdateSpecificClient);
+clientRoute.delete('/delete-client/:id',authGuard,DeleteSpecificClient);
 clientRoute.get('/get-all-client',getAllClient);
 clientRoute.get('/get-specific-client/:id',getSpecificClient);
 clientRoute.get('/get-client-query',getQueryClient);
@@ -36,21 +37,23 @@ clientRoute.get('/get-client-query',getQueryClient);
 
 // create job request
 clientRoute.post('/create-job',authGuard,createJob);
-clientRoute.delete('/delete-job',authGuard,deleteJob);
-clientRoute.put('/update-job',authGuard,updateJob);
+clientRoute.delete('/delete-job/:id',authGuard,deleteJob);
+clientRoute.put('/update-job/:id',authGuard,updateJob);
 clientRoute.get('/get-all-job',getAllJob);
-clientRoute.get('/get-specific-job',getSpecificJob);
-clientRoute.delete('/get-query-job',queryJobs);
+clientRoute.get('/get-specific-job/:id',getSpecificJob);
+clientRoute.get('/get-query-job',queryJobs);
 clientRoute.get('/job-creater-view',authGuard,getJobCreaterView);
  
 
 
 // apply job request
-clientRoute.post('/apply-job/:id',authGuard,applyJob);
+clientRoute.put('/apply-job/:id',authGuard,applyJob);
 clientRoute.put('/accept-application/:id',authGuard,acceptApplication);
 clientRoute.put('/reject-application/:id',authGuard,rejectApplication);
 clientRoute.get('/get-accept-applicant',authGuard,getAcceptJob);
 clientRoute.get('/get-reject-applicant',authGuard,rejectApplication);
+clientRoute.get('/get-all-job-application',authGuard,getAllJobApplication);
+
 
 
 

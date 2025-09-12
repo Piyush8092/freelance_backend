@@ -100,7 +100,7 @@ const profileSchema = new mongoose.Schema({
     // User Reference
     userId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: 'user',
         required: [true, 'User is required'],
     },
     
@@ -114,6 +114,63 @@ const profileSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     }
+    ,// Engagement
+    likes: [{
+        userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'user',
+        },
+        likeDate: {
+            type: Date,
+            default: Date.now,
+        }
+    }],
+    
+    dislikes: [{
+        userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'user',
+        },
+        dislikeDate: {
+            type: Date,
+            default: Date.now,
+        }
+    }],
+    
+    shares: [{
+        userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'user',
+        },
+        shareDate: {
+            type: Date,
+            default: Date.now,
+        }
+    }],
+    
+    comments: [{
+        userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'user',
+            required: true,
+        },
+        comment: {
+            type: String,
+            required: true,
+        },
+        commentDate: {
+            type: Date,
+            default: Date.now,
+        }
+    }],
+    colaboration:[{
+postId:
+{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Job',
+}
+}]
+    
     
 }, {timestamps: true});
 

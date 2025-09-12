@@ -34,7 +34,7 @@ const LoginRout = async (req, res) => {
             return res.status(400).json({ message: 'Invalid credentials' });
         }
         
-        let token = jwt.sign({id: existingUser._id}, process.env.SECRET_KEY ||'me333enneffiimsqoqomcngfehdj3idss', {expiresIn: '1d'});
+        let token = jwt.sign({id: existingUser._id}, process.env.SECRET_KEY ||'me333enneffiimsqoqomcngfehdj3idss', {expiresIn: '7d'});
         res.cookie('jwt', token, {httpOnly: true, maxAge: 1000*60*60*24});
 
         res.json({ message: 'Login successful', status: 200, data: existingUser, success: true, error: false });

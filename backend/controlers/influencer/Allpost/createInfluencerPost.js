@@ -1,5 +1,5 @@
 let influencerPostModel = require('../../../Model/influencerPostModel');
-
+let userModel=require('../../../Model/userModel');
 const createInfluencerPost = async (req, res) => {
     try {       
         let payload = req.body;

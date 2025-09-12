@@ -33,7 +33,7 @@ router.use(passport.initialize());
 router.post('/signup',SignupRout);
 router.post('/login',LoginRout);
 router.post('/change-password',ChangePassword);
-router.post('/logout',LogoutRout);
+router.get('/logout',LogoutRout);
 router.put('/change-password/:id',authGuard,ChangePassword);
 
 // for google signup/login
@@ -79,9 +79,10 @@ router.delete('/delete-user/:id',authGuard,deleteUser);
 router.get('/get-specific-user-detail/:id',authGuard,getSpecificUserDetail);
 
 // user action campaign
-router.put('/create-campaign',authGuard,createCampaign);
+router.post('/create-campaign',authGuard,createCampaign);
 router.get('/get-all-campaign',getAllCampaigns);
 router.get('/get-specific-campaign/:id',getSpecificCampaign);
+//query api is => http://localhost:3000/api/get-query-campaign?query=kolkata
 router.get('/get-query-campaign',queryCampaigns);
 router.put('/update-campaign/:id',authGuard,updateCampaign);
 router.delete('/delete-campaign/:id',authGuard,deleteCampaign);

@@ -11,7 +11,7 @@ const acceptApplication = async (req, res) => {
         if (!ExistJob) {
             return res.status(404).json({message: 'Job not found'});
         }
-        if (ExistJob.userId.toString() !== userId.toString()) {
+        if (ExistJob.userId.toString() !== userId.toString() && req.user.role!=='ADMIN') {
             return res.status(403).json({message: 'Unauthorized access'});
         }
         if (ExistJob.AcceptedId.includes(userId)) {

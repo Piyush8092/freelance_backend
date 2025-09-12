@@ -10,7 +10,7 @@ const getAllInfluencer = async (req, res) => {
             .populate('likes.userId', 'name email profileImage')
             .populate('dislikes.userId', 'name email profileImage')
             .populate('comments.userId', 'name email profileImage')
-            .populate('colaboration.postId', 'title description')
+            // .populate('colaboration.postId', 'title description') // Remove this line
             .skip(skip)
             .limit(limit)
             .sort({ createdAt: -1 });

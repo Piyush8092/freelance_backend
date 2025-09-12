@@ -17,7 +17,8 @@ const UpdateSpecificClient = async (req, res) => {
         let payload = req.body;
         
         // Find existing client
-        let ExistClient = await ClientModel.findById(id);
+        let ExistClient = await ClientModel
+        .findById(id);
         if (!ExistClient) {
             return res.status(404).json({message: 'Client not found'});
         }
@@ -32,23 +33,6 @@ const UpdateSpecificClient = async (req, res) => {
             const validProfileTypes = ['client'];
             if (!validProfileTypes.includes(payload.profileType)) {
                 return res.status(400).json({message: 'Invalid profile type'});
-            }
-        }
-        
-        // Profile type specific validation for updates
-        const profileType = payload.profileType || ExistClient.profileType;
-        
-        if (payload.profileType && payload.profileType !== ExistClient.profileType) {
-            // If changing profile type, validate all required fields for new type
-            if (profileType === 'Business Profile') {
-                if (!payload.businessName || !payload.establishedInYear || 
-                    !payload.workBusinessImages || payload.workBusinessImages.length === 0) {
-                    return res.status(400).json({message: 'All Business Profile fields are required when changing to Business Profile'});
-                }
-            } else if (profileType === 'Service Profile') {
-                if (!payload.description) {
-                    return res.status(400).json({message: 'Description is required for Service Profile'});
-                }
             }
         }
         
@@ -69,18 +53,15 @@ const UpdateSpecificClient = async (req, res) => {
             }
         }
         
-        // Validate image arrays based on profile type
-        if (profileType === 'Business Profile') {
-            if (payload.workBusinessImages && (!Array.isArray(payload.workBusinessImages) || payload.workBusinessImages.length === 0)) {
-                return res.status(400).json({message: 'Work/Business images are required for Business Profile'});
-            }
-        }
-        
         // Update the client
         const result = await ClientModel.findByIdAndUpdate(id, payload, {
             new: true,
             runValidators: true
-        });
+        })
+        .populate('likes.userId', 'name email profileImage')
+        .populate('dislikes.userId', 'name email profileImage')
+        .populate('comments.userId', 'name email profileImage')
+        .populate('colaboration.postId', 'title description');
         
         res.json({
             message: 'Client updated successfully', 

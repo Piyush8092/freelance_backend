@@ -6,7 +6,7 @@ const getAcceptJob = async (req, res) => {
         let page = parseInt(req.query.page) || 1;
         let limit = parseInt(req.query.limit) || 10;
         const skip = (page - 1) * limit;
-if(req.user._id!==userId){
+if(req.user._id!==userId && req.user.role!=='ADMIN'){
     return res.status(403).json({message: 'Unauthorized access'});
 }
 

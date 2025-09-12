@@ -26,8 +26,8 @@ app.use(cors({
 
 
 app.use('/api',router);
-app.use('/api/infulencer',influencerRoute);
-app.use('/api/client',clientRoute);
+app.use('/api',influencerRoute);
+app.use('/api',clientRoute);
 
  connectDB();
 app.listen(port,()=>{

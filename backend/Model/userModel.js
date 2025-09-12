@@ -38,47 +38,47 @@ const userSchema = new mongoose.Schema({
         enum: ['client', 'influencer','ADMIN'],
         default: 'client'
     },
-    verified: {
-        type: Boolean,
-        default: true
-    },
-    worked_jobId: [{
-        type: mongoose.Schema.Types.ObjectId,
-    }],
-    ratting: [
-        {
-            userId:{
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'user'
-    },
-        rattingNo:{
-            type: Number,
-            default: 0
-        }
-}],
-reach:[{
-    userId:{
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'user'
-    },
-        reachNo:{
-            type: Number,
-            default: 0
-        }
-}],
-    review:[{
-        userId:{
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'user'
-        },
-        reeview:{
-            type: String,
-        },
-        image:{
-            type: String,
-            default: ''
-        }
-     }]
+//     verified: {
+//         type: Boolean,
+//         default: true
+//     },
+//     worked_jobId: [{
+//         type: mongoose.Schema.Types.ObjectId,
+//     }],
+//     ratting: [
+//         {
+//             userId:{
+//             type: mongoose.Schema.Types.ObjectId,
+//             ref: 'user'
+//     },
+//         rattingNo:{
+//             type: Number,
+//             default: 0
+//         }
+// }],
+// reach:[{
+//     userId:{
+//             type: mongoose.Schema.Types.ObjectId,
+//             ref: 'user'
+//     },
+//         reachNo:{
+//             type: Number,
+//             default: 0
+//         }
+// }],
+//     review:[{
+//         userId:{
+//             type: mongoose.Schema.Types.ObjectId,
+//             ref: 'user'
+//         },
+//         reeview:{
+//             type: String,
+//         },
+//         image:{
+//             type: String,
+//             default: ''
+//         }
+//      }]
 
 }, { timestamps: true });
 
@@ -94,5 +94,4 @@ userSchema.pre('validate', function (next) {
 });
 
 const User = mongoose.model('user', userSchema);
-
 module.exports = User;

@@ -7,7 +7,7 @@ const createJob = async (req, res) => {
         // Validate all required fields
         if ( !payload.title || !payload.yourNameBusinessInstituteFirmCompany || 
             !payload.selectCategory || !payload.selectSubCategory || !payload.address || 
-            !payload.pincode || !payload.description || !payload.salaryFrom || 
+             !payload.description || !payload.salaryFrom || 
             !payload.salaryTo || !payload.salaryPer || !payload.requiredExperience || 
             !payload.workShift || !payload.workMode || !payload.workType ||
             payload.allowCallInApp === undefined  || 

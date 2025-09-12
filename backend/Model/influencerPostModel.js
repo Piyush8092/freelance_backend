@@ -1,5 +1,5 @@
 let mongoose = require('mongoose');
-
+let User = require('./userModel');
 const announcementSchema = new mongoose.Schema({
     // Basic Post Information
     title: {
@@ -19,7 +19,7 @@ const announcementSchema = new mongoose.Schema({
     },
     profileImage: {
         type: String,
-        required: [true, 'Profile image is required'],
+        ref: 'user',
     },
     
     // Post Metadata
@@ -49,6 +49,10 @@ const announcementSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'user',
         },
+        like:{
+            type: Boolean,
+            default: true,
+        },
         likeDate: {
             type: Date,
             default: Date.now,
@@ -59,6 +63,10 @@ const announcementSchema = new mongoose.Schema({
         userId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'user',
+        },
+        dislike:{
+            type: Boolean,
+            default: true,
         },
         dislikeDate: {
             type: Date,

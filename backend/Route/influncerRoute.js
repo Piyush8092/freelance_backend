@@ -4,7 +4,7 @@ const authGuard = require('../middleware/auth');
  cookie();
 
 const { UpdateSpecificInfluencer } = require('../controlers/influencer/influencerRegistration/UpdateSpecificInfluencer');
-const { CreateInfluencerServices } = require('../controlers/influencer/influencerRegistration/createInfluencer');
+ const { CreateInfluencer } = require('../controlers/influencer/influencerRegistration/createInfluencer');
 const { queryInfluencers } = require('../controlers/influencer/influencerRegistration/queryInfluencer');
 const { DeleteSpecificInfluencer } = require('../controlers/influencer/influencerRegistration/DeleteSpecificInfluencer');
 const { createInfluencerPost } = require('../controlers/influencer/Allpost/createInfluencerPost');
@@ -16,17 +16,20 @@ const { getQueryPost } = require('../controlers/influencer/Allpost/getQueryPost'
 const { getInfluencerPost } = require('../controlers/influencer/Allpost/getInfluencerPost');
 const { getAllInfluencer } = require('../controlers/influencer/influencerRegistration/getAllInfluencer');
 const { getSpecificInfulencer } = require('../controlers/influencer/influencerRegistration/getSpecificInfulencer');
- 
+ const { addCommentInfluencerPost } = require('../controlers/influencer/Allpost/addCommentInfluencerPost');
+const { deleteCommentInfluencerPost } = require('../controlers/influencer/Allpost/deleteCommentInfluencerPost');
+const { updateLikeInfluencerPost } = require('../controlers/influencer/Allpost/updateLikeInfluencerPost');
+const { updateDislikeInfluencerPost } = require('../controlers/influencer/Allpost/updateDislikeInfluencerPost');
 
 //  create client request
-influencerRoute.post('/create-influencer',authGuard,CreateInfluencerServices)
- influencerRoute.put('/update-influencer',authGuard,UpdateSpecificInfluencer);
-influencerRoute.delete('/delete-influencer',authGuard,DeleteSpecificInfluencer);
+influencerRoute.post('/create-influencer',authGuard,CreateInfluencer)
+ influencerRoute.put('/update-influencer/:id',authGuard,UpdateSpecificInfluencer);
+influencerRoute.delete('/delete-influencer/:id',authGuard,DeleteSpecificInfluencer);
 influencerRoute.get('/get-influencer-query',queryInfluencers);
 influencerRoute.get('/get-specific-influencer/:id',getSpecificInfulencer);
 influencerRoute.get('/get-all-influencer',getAllInfluencer);
 
-
+ 
  
  
 // influencer create post request
@@ -37,7 +40,14 @@ influencerRoute.delete('/delete-influencer-post/:id',authGuard,deleteInfluencerP
 influencerRoute.get('get-all-post',getInfluencerPost);
 influencerRoute.get('/get-post-creater-view',authGuard,getPostCreaterView);
 influencerRoute.get('/query-influencer-post',getQueryPost);
- 
+
+// Like/Dislike influencer posts
+influencerRoute.put('/like-influencer-post/:id', authGuard, updateLikeInfluencerPost);
+influencerRoute.put('/dislike-influencer-post/:id', authGuard, updateDislikeInfluencerPost);
+
+// Comment routes for influencer posts
+influencerRoute.post('/comment-influencer-post/:id', authGuard, addCommentInfluencerPost);
+influencerRoute.delete('/comment-influencer-post/:id/:commentId', authGuard, deleteCommentInfluencerPost);
 
 // all influenecre detail
 influencerRoute.get('/get-all-influencer',getAllInfluencer);

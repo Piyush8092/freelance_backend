@@ -4,6 +4,9 @@ const rejectApplication = async (req, res) => {
     try {       
         let id = req.params.id;
         let userId = req.user._id;
+        if(req.user.role!=='ADMIN' && req.user._id!==userId){
+            return res.status(403).json({message: 'Unauthorized access'});
+        }
         let ExistJob = await ClientJob.findById(id);
         if(!ExistJob.jobApplyId.includes(userId)) {
             return res.status(400).json({message: 'You have not applied for this job'});
@@ -12,9 +15,7 @@ const rejectApplication = async (req, res) => {
         if (!ExistJob) {
             return res.status(404).json({message: 'Job not found'});
         }
-        if (ExistJob.userId.toString() !== userId.toString()) {
-            return res.status(403).json({message: 'Unauthorized access'});
-        }
+       
         if (ExistJob.AcceptedId.includes(userId)) {
             return res.status(400).json({message: 'You have already accepted for this job'});
         }

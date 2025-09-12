@@ -1,5 +1,5 @@
 let mongoose = require('mongoose');
-
+let User = require('./userModel');
 const profileSchema = new mongoose.Schema({
     // Profile Type - determines which fields are required
     profileType: {
@@ -85,25 +85,15 @@ default:'influencer'
     // User Reference
     userId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: 'user',
         required: [true, 'User is required'],
-    },
-    
-    // Status
-    isActive: {
-        type: Boolean,
-        default: true,
-    },
-    isVerified: {
-        type: Boolean,
-        default: false,
     },
 
     likes: [
         {
           userId: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'User',
+            ref: 'user',
             required: true,
           },
           like: {
@@ -116,7 +106,7 @@ default:'influencer'
         {
           userId: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'User',
+            ref: 'user',
             required: true,
           },
           dislike: {
@@ -130,7 +120,7 @@ default:'influencer'
         {
           userId: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'User',
+            ref: 'user',
             required: true,
           },
           comment: {
@@ -140,12 +130,11 @@ default:'influencer'
         },
       ],
     colaboration:[{
-postId:
-{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Job',
-}
-}],
+        postId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'user',
+        }
+    }],
 
     
 }, {timestamps: true});
