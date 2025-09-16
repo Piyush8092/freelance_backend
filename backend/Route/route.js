@@ -21,6 +21,16 @@ const { getSpecificCampaign } = require('../controlers/campaign/getSpecificCampa
 const { queryCampaigns } = require('../controlers/campaign/getQueryCampaign');
 const { updateCampaign } = require('../controlers/campaign/updateCampaign');
 const { deleteCampaign } = require('../controlers/campaign/deleteCampaign');
+const { createPrivacyPolicy } = require('../controlers/privacy/privacyCreate');
+const { getPrivacyPolicy } = require('../controlers/privacy/privacyGet');
+const { editPrivacyPolicy } = require('../controlers/privacy/privecyEdit');
+const { deletePrivacyPolicy } = require('../controlers/privacy/privecyDelete');
+const { getSpecificPrivacyPolicy } = require('../controlers/privacy/getSpecificPrivecy');
+const { createTermsAndConditions } = require('../controlers/term/termCreate');
+const { getTermsAndConditions } = require('../controlers/term/termGet');
+const { editTermsAndConditions } = require('../controlers/term/termEdit');
+const { deleteTermsAndConditions } = require('../controlers/term/termDelete');
+const { getSpecificTermsAndConditions } = require('../controlers/term/getSpecificTerm');
 
 router.use(passport.initialize());
 
@@ -89,12 +99,20 @@ router.delete('/delete-campaign/:id',authGuard,deleteCampaign);
 
 
 
-// colaboration apis
-
  
+ // privacy policy
+router.post('/create-privacy-policy',authGuard,createPrivacyPolicy);
+router.get('/get-privacy-policy',getPrivacyPolicy);
+router.put('/edit-privacy-policy/:id',authGuard,editPrivacyPolicy);
+router.delete('/delete-privacy-policy/:id',authGuard,deletePrivacyPolicy);
+router.get('/get-specific-privacy-policy/:id',getSpecificPrivacyPolicy);
 
 
-
-
+// terms and conditions
+router.post('/create-terms-and-conditions',authGuard,createTermsAndConditions);
+router.get('/get-terms-and-conditions',getTermsAndConditions);
+router.put('/edit-terms-and-conditions/:id',authGuard,editTermsAndConditions);
+router.delete('/delete-terms-and-conditions/:id',authGuard,deleteTermsAndConditions);
+router.get('/get-specific-terms-and-conditions/:id',getSpecificTermsAndConditions);
 
 module.exports=router;
