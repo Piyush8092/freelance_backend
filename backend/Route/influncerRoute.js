@@ -62,9 +62,14 @@ influencerRoute.put('/dislike-influencer-post/:id', authGuard, updateDislikeInfl
 influencerRoute.put('/comment-influencer-post/:id', authGuard, addCommentInfluencerPost);
 influencerRoute.delete('/delete-comment-influencer-post/:id/:commentId', authGuard, deleteCommentInfluencerPost);
 
-// all influenecre detail
-influencerRoute.get('/get-all-influencer',getAllInfluencer);
-influencerRoute.get('/get-specific-influencer/:id',getSpecificInfulencer);
+// all influenecre history Detail
+// influencerRoute.get('/get-apply-history',authGuard,getApplyHistory);
+ 
+
+
+
+
+
 
  
 

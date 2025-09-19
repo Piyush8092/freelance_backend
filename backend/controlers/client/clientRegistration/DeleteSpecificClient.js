@@ -9,9 +9,9 @@ const DeleteSpecificClient = async (req, res) => {
         if (!ExistClient) {
             return res.status(404).json({message: 'Client not found'});
         }
-
+console.log(ExistClient);
         // Check ownership
-        if (ExistClient.userId.toString() !== userId.toString()) {
+        if (ExistClient.userId.toString() !== userId.toString() && req.user.role!=='ADMIN') {
             return res.status(403).json({message: 'Unauthorized access'});
         }
          

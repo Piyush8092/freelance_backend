@@ -22,11 +22,7 @@ const getQueryClient = async (req, res) => {
                 { establishedInYear: regexQuery }
             ]
         };
-        const result = await ClientModel.find(searchQuery)
-
-        .populate('likes.userId', 'name email profileImage')
-            .populate('dislikes.userId', 'name email profileImage')
-            .populate('comments.userId', 'name email profileImage')
+        const result = await ClientModel.find(searchQuery).populate('colaboration.postId', 'title description')
             .skip(skip)
             .limit(limit)
             .sort({ createdAt: -1 });

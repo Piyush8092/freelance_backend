@@ -3,10 +3,7 @@ const getSpecificClient = async (req, res) => {
     try {  
         let id = req.params.id;
         let result = await ClientModel.findById(id)
-            .populate('likes.userId', 'name email profileImage')
-            .populate('dislikes.userId', 'name email profileImage')
-            .populate('comments.userId', 'name email profileImage');
-
+            .populate('colaboration.postId', 'title description');
         if(!result){
             return res.status(404).json({
                 message: 'No data found', 

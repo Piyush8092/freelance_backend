@@ -24,12 +24,15 @@ const { getAllJobApplication } = require('../controlers/client/ApplyInfluencer/G
 
 //  create client request
 clientRoute.post('/create-client',authGuard,CreateClient);
-clientRoute.get('/client-query',queryClients);
-clientRoute.put('/update-client/:id',authGuard,UpdateSpecificClient);
+ clientRoute.put('/update-client/:id',authGuard,UpdateSpecificClient);
 clientRoute.delete('/delete-client/:id',authGuard,DeleteSpecificClient);
 clientRoute.get('/get-all-client',getAllClient);
 clientRoute.get('/get-specific-client/:id',getSpecificClient);
+// api is => http://localhost:3000/api/get-client-query?query=electronic
 clientRoute.get('/get-client-query',getQueryClient);
+// same but with out populate
+clientRoute.get('/client-query',queryClients);
+
 
 
 

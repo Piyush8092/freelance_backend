@@ -19,14 +19,16 @@ const UpdateSpecificClient = async (req, res) => {
         // Find existing client
         let ExistClient = await ClientModel
         .findById(id);
+ 
         if (!ExistClient) {
             return res.status(404).json({message: 'Client not found'});
         }
         
         // Check ownership
-        if (ExistClient.userId.toString() !== userId.toString()) {
+        if (ExistClient.userId.toString() !== userId.toString() && req.user.role!=='ADMIN') {
             return res.status(403).json({message: 'Unauthorized access'});
         }
+        
         
         // Validate profileType enum if being updated
         if (payload.profileType) {
@@ -58,9 +60,7 @@ const UpdateSpecificClient = async (req, res) => {
             new: true,
             runValidators: true
         })
-        .populate('likes.userId', 'name email profileImage')
-        .populate('dislikes.userId', 'name email profileImage')
-        .populate('comments.userId', 'name email profileImage')
+         
         .populate('colaboration.postId', 'title description');
         
         res.json({

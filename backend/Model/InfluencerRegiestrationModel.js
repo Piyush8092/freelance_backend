@@ -129,6 +129,8 @@ default:'influencer'
           },
         },
       ],
+
+      // here post id come from job Application after succesful
     colaboration:[{
         postId: {
             type: mongoose.Schema.Types.ObjectId,

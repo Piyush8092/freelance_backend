@@ -5,9 +5,7 @@ const getAllClient = async (req, res) => {
         let limit = parseInt(req.query.limit) || 10;
         const skip = (page - 1) * limit;
         const result = await ClientModel.find()
-            .populate('likes.userId', 'name email profileImage')
-            .populate('dislikes.userId', 'name email profileImage')
-            .populate('comments.userId', 'name email profileImage')
+             .populate('colaboration.postId', 'title description')
             .skip(skip)
             .limit(limit)
             .sort({ createdAt: -1 });

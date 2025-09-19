@@ -3,6 +3,12 @@
 const CreateClient = async (req, res) => {
   try {
     let payload = req.body;
+let Id = req.user._id;
+let existClient=await ClientModel.findOne({userId:Id});
+if(existClient){
+    return res.status(400).json({ message: "Client already exists" });
+}
+
 
     // --- Basic required fields ---
     if (

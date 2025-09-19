@@ -4,8 +4,11 @@
 const CreateInfluencer = async (req, res) => {
   try {
     let payload = req.body;
-
-    // --- Basic required fields ---
+let Id = req.user._id;
+let existClient=await InfluencerModel.findOne({userId:Id});
+if(existClient){
+    return res.status(400).json({ message: "Client already exists" });
+}    // --- Basic required fields ---
     if (
       !payload.profileImage ||
       !payload.selectCategory ||
