@@ -12,7 +12,7 @@ const updateInfluencerPost = async (req, res) => {
         }
 
         let UserId = req.user._id;
-        if (ExistPost.userId.toString() !== UserId.toString()) {
+        if (ExistPost.userId.toString() !== UserId.toString() && req.user.role!=='ADMIN') {
             return res.status(403).json({message: 'Unauthorized access'});
         }
 

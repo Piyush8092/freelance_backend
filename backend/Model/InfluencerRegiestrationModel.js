@@ -135,7 +135,34 @@ default:'influencer'
             ref: 'user',
         }
     }],
+    followers: [
+        {follow:{
+            type: Boolean,
+            default: true,
+        },
+          userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'user',
+            required: true,
+          },
+        },
+      ],
+      following: [
+        {following:{
+            type: Boolean,
+            default: true,
+        },
+          userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'user',
+            required: true,
+          },
+        },
+      ],
 
+    membershipPlan: {
+    type: [String],
+ }
     
 }, {timestamps: true});
 

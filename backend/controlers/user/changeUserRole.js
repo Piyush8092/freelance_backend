@@ -1,27 +1,28 @@
+ 
 let userModel = require('../../Model/userModel');
 
-const updateUser = async (req, res) => {
+const changeUserRole = async (req, res) => {
     try {           
         let id = req.params.id;
         let payload = req.body;
+        let newRole = payload.role;
         let ExistUser = await userModel.findById(id);
-        
         if (!ExistUser) {
-            return res.status(404).json({message: 'User not found'});
+            return res.status(404).json({ message: 'User not found' });
         }
 
-        let UserRole   = req.user.role;
-         if (UserRole !== 'ADMIN') {
-            return res.status(403).json({message: 'Unauthorized access'});
+        // Authorization: only ADMIN can change role
+        let UserRole = req.user.role;
+        if (UserRole !== 'ADMIN') {
+            return res.status(403).json({ message: 'Unauthorized access' });
         }
 
-        const result = await userModel.findByIdAndUpdate(id, payload, {
-            new: true,
-            runValidators: true
-        });
-        
+        // Update user role in userModel
+    let result=    await userModel.findByIdAndUpdate(id, { role: newRole }, { new: true });
+
+       
         res.json({
-            message: 'User updated successfully', 
+            message: 'User role changed successfully', 
             status: 200, 
             data: result, 
             success: true, 
@@ -29,7 +30,6 @@ const updateUser = async (req, res) => {
         });
 
     }
-
     catch (e) {
         res.json({
             message: 'Something went wrong', 
@@ -41,5 +41,6 @@ const updateUser = async (req, res) => {
     }
 };
 
-module.exports = { updateUser };
+module.exports = { changeUserRole };
+
 

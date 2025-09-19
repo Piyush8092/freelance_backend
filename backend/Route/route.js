@@ -7,10 +7,7 @@ const { ChangePassword } = require('../controlers/auth/changePassword');
 const { LoginRout } = require('../controlers/auth/loginRout');
 const { LogoutRout } = require('../controlers/auth/logoutRout');
 const { SignupRout } = require('../controlers/auth/signupRout');
-const { getUserDetail } = require('../controlers/user/getUserDetail');
-const { updateUser } = require('../controlers/user/updateUser');
-const { deleteUser } = require('../controlers/user/deleteUser');
-const { ratting } = require('../controlers/UserActions/rattingUpdateRoute');
+ const { ratting } = require('../controlers/UserActions/rattingUpdateRoute');
 const { reach } = require('../controlers/UserActions/reachUpdateRoute');
 const { review } = require('../controlers/UserActions/reviewUpdateRoute');
 const { getSpecificUserDetail } = require('../controlers/user/getSpecificUserDetail');
@@ -31,6 +28,13 @@ const { getTermsAndConditions } = require('../controlers/term/termGet');
 const { editTermsAndConditions } = require('../controlers/term/termEdit');
 const { deleteTermsAndConditions } = require('../controlers/term/termDelete');
 const { getSpecificTermsAndConditions } = require('../controlers/term/getSpecificTerm');
+const { getClientUserDetail } = require('../controlers/user/getAllClientDetail');
+ const { changeUserRole } = require('../controlers/user/changeUserRole');
+const { getAllUserFromUserModel } = require('../controlers/user/getAllUserFromUserModel');
+const { getSpecificUserFromUserModel } = require('../controlers/user/getSpecificUserFromUserModel');
+const { getInfluencerUserDetail } = require('../controlers/user/getInfluencerUserDetail');
+const { getQueryUserFromUserModel } = require('../controlers/user/getQueryUserFromUserModel');
+ 
 
 router.use(passport.initialize());
 
@@ -83,10 +87,22 @@ router.get('/auth/google/callback',
 
 
 // user detail
-router.get('/get-user-detail',authGuard,getUserDetail);
-router.put('/update-user/:id',authGuard,updateUser);
-router.delete('/delete-user/:id',authGuard,deleteUser);
-router.get('/get-specific-user-detail/:id',authGuard,getSpecificUserDetail);
+router.get('/get-client-user-detail',authGuard,getClientUserDetail);
+router.get('/get-influencer-user-detail',authGuard,getInfluencerUserDetail);
+ router.get('/get-specific-service-user-detail/:id',authGuard,getSpecificUserDetail);
+
+// for admin access and role change
+router.put('/change-role-usermodel/:id',authGuard,changeUserRole);
+router.get('/all-user-usermodel',authGuard,getAllUserFromUserModel);
+router.get('/get-specific-user-usermodel/:id',authGuard,getSpecificUserFromUserModel);
+// api is => http://localhost:3000/api/get-query-user-usermodel?query=ADMIN
+router.get('/get-query-user-usermodel',authGuard,getQueryUserFromUserModel);
+
+
+
+
+
+
 
 // user action campaign
 router.post('/create-campaign',authGuard,createCampaign);

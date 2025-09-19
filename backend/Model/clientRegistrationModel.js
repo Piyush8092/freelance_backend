@@ -163,13 +163,17 @@ const profileSchema = new mongoose.Schema({
             default: Date.now,
         }
     }],
+    
     colaboration:[{
 postId:
 {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Job',
 }
-}]
+}],
+membershipPlan: {
+    type: [String],
+ }
     
     
 }, {timestamps: true});
