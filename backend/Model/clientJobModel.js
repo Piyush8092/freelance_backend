@@ -99,14 +99,14 @@ const jobSchema = new mongoose.Schema({
         }
     }],
     
-    likes: [{
+    bookmarks: [{
         userId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'user',
         },
-        likeDate: {
-            type: Date,
-            default: Date.now,
+        bookmark: {
+             type: Boolean,
+            default: false,
         }
     }],
     

@@ -15,11 +15,15 @@ const { getJobCreaterView } = require('../controlers/client/activity/ClientCreat
 const { applyJob } = require('../controlers/client/ApplyInfluencer/applyJobPost');
 const { acceptApplication } = require('../controlers/client/ApplyInfluencer/acceptApplication');
 const { rejectApplication } = require('../controlers/client/ApplyInfluencer/rejectApplication');
-const { getAcceptJob } = require('../controlers/client/ApplyInfluencer/GetAcceptApplicant');
+const { getAcceptJob, getAcceptJobClientView } = require('../controlers/client/ApplyInfluencer/GetAcceptApplicantJobCreaterView');
+const { getRejectJob, getRejectJobJobCreaterView } = require('../controlers/client/ApplyInfluencer/GetRejectApplicantJobCreaterView');
+const { bookmarkJob } = require('../controlers/client/ApplyInfluencer/bookmarkJob');
+const { withdrawApplication } = require('../controlers/influencer/jobApplyInfluencer/withdrawApplication');
 const { getAllClient } = require('../controlers/client/clientRegistration/getAllCilent');
 const { getSpecificClient } = require('../controlers/client/clientRegistration/getSpecificClient');
 const { getQueryClient } = require('../controlers/client/clientRegistration/getQueryCilent');
 const { getAllJobApplication } = require('../controlers/client/ApplyInfluencer/GetAllJobApplicaion');
+const { getAllJobApplicationAdminView } = require('../controlers/client/ApplyInfluencer/GetAllJobApplicationAdminView');
   cookie();
 
 //  create client request
@@ -50,13 +54,13 @@ clientRoute.get('/job-creater-view',authGuard,getJobCreaterView);
 
 
 // apply job request
-clientRoute.put('/apply-job/:id',authGuard,applyJob);
-clientRoute.put('/accept-application/:id',authGuard,acceptApplication);
+ clientRoute.put('/accept-application/:id',authGuard,acceptApplication);
 clientRoute.put('/reject-application/:id',authGuard,rejectApplication);
-clientRoute.get('/get-accept-applicant',authGuard,getAcceptJob);
-clientRoute.get('/get-reject-applicant',authGuard,rejectApplication);
-clientRoute.get('/get-all-job-application',authGuard,getAllJobApplication);
-
+ clientRoute.put('/bookmark-job/:id',authGuard,bookmarkJob);
+clientRoute.get('/get-accept-applicant-jobCreater-view',authGuard,getAcceptJobClientView);
+clientRoute.get('/get-reject-applicant-jobCreater-view',authGuard,getRejectJobJobCreaterView);
+clientRoute.get('/get-job-application-creater-view',authGuard,getAllJobApplication);
+clientRoute.get('/get-all-job-application-admin-view',authGuard,getAllJobApplicationAdminView);
 
 
 

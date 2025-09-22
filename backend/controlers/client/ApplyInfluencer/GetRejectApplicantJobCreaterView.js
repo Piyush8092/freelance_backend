@@ -1,13 +1,13 @@
-const ClientJob = require('../../../Model/clientJobModel');
+let ClientJob = require('../../../Model/clientJobModel');
 
-const getApplyHistory = async (req, res) => {
+const getRejectJobJobCreaterView = async (req, res) => {
     try {
         let userId = req.user._id;
 
-        // Authorization check - only influencers can view their apply history
-        if(req.user.role !== 'influencer' && req.user.role !== 'ADMIN'){
+        // Authorization check
+        if (req.user.role !== 'ADMIN' && req.user.role !== 'client') {
             return res.status(403).json({
-                message: 'Unauthorized access - Only influencers can view apply history',
+                message: 'Unauthorized access - Only clients and admins can view rejected applications',
                 status: 403,
                 success: false,
                 error: true
@@ -18,16 +18,17 @@ const getApplyHistory = async (req, res) => {
         let limit = parseInt(req.query.limit) || 10;
         const skip = (page - 1) * limit;
 
-        // Query for jobs where the current user has applied
-        // Looking in jobApplyId array for the user's ID
+        // Query for jobs where:
+        // 1. The current user is the job creator (userId matches)
+        // 2. The job has rejected applications (RejectedId array has entries with reject: true)
         const result = await ClientJob.find({
-            'jobApplyId.userId': userId,
-            'jobApplyId.apply': true
+            userId: userId,
+            'RejectedId.reject': true
         })
         .populate('userId', 'name email phone country role')
+        .populate('RejectedId.userId', 'name email phone country role')
         .populate('jobApplyId.userId', 'name email phone country role')
         .populate('AcceptedId.userId', 'name email phone country role')
-        .populate('RejectedId.userId', 'name email phone country role')
         .populate('bids.userId', 'name email phone country role')
         .populate('hires.userId', 'name email phone country role')
         .populate('likes.userId', 'name email phone country role')
@@ -38,32 +39,35 @@ const getApplyHistory = async (req, res) => {
 
         // Count total documents with the same criteria
         const total = await ClientJob.countDocuments({
-            'jobApplyId.userId': userId,
-            'jobApplyId.apply': true
+            userId: userId,
+            'RejectedId.reject': true
         });
         const totalPages = Math.ceil(total / limit);
 
         res.json({
-            message: 'Jobs retrieved successfully', 
-            status: 200, 
-            data: result, 
-            success: true, 
-            error: false, 
-            total, 
+            message: 'Rejected applications retrieved successfully',
+            status: 200,
+            data: result,
+            success: true,
+            error: false,
+            total,
             totalPages,
-            currentPage: page
+            currentPage: page,
+            hasNextPage: page < totalPages,
+            hasPrevPage: page > 1
         });
     }
     catch (e) {
-        res.json({
-            message: 'Something went wrong', 
-            status: 500, 
-            data: e.message, 
-            success: false, 
+        res.status(500).json({
+            message: 'Something went wrong',
+            status: 500,
+            data: e.message,
+            success: false,
             error: true
         });
     }
 };
 
-module.exports = { getApplyHistory };
+module.exports = { getRejectJobJobCreaterView };
+
 

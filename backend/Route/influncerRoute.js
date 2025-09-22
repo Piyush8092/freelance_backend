@@ -24,6 +24,13 @@ const { updateFollowers } = require('../controlers/influencer/influencerRegistra
 const { updateFolloweing } = require('../controlers/influencer/influencerRegistration/updateFolloweing');
 const { getAllFollower } = require('../controlers/influencer/influencerRegistration/getAllFollower');
 const { getAllFolloweing } = require('../controlers/influencer/influencerRegistration/getAllFolloweing');
+const { getApplyHistory } = require('../controlers/influencer/jobApplyInfluencer/applyHistory');
+const { getAcceptedJobs } = require('../controlers/influencer/jobApplyInfluencer/getAcceptedJobs');
+const { getRejectedJobs } = require('../controlers/influencer/jobApplyInfluencer/getRejectedJobs');
+const { getBookmarkedJobs } = require('../controlers/influencer/jobApplyInfluencer/getBookmarkedJobs');
+const { withdrawApplication } = require('../controlers/influencer/jobApplyInfluencer/withdrawApplication');
+const { bookmarkJob } = require('../controlers/client/ApplyInfluencer/bookmarkJob');
+const { applyJob } = require('../controlers/influencer/activity/ApplyJob');
 
 //  create client request
 influencerRoute.post('/create-influencer',authGuard,CreateInfluencer)
@@ -62,9 +69,14 @@ influencerRoute.put('/dislike-influencer-post/:id', authGuard, updateDislikeInfl
 influencerRoute.put('/comment-influencer-post/:id', authGuard, addCommentInfluencerPost);
 influencerRoute.delete('/delete-comment-influencer-post/:id/:commentId', authGuard, deleteCommentInfluencerPost);
 
-// all influenecre history Detail
-// influencerRoute.get('/get-apply-history',authGuard,getApplyHistory);
- 
+// Job application routes
+influencerRoute.put('/influencer-apply-job/:id', authGuard, applyJob);
+influencerRoute.put('/influencer-withdraw-application/:id', authGuard, withdrawApplication);
+influencerRoute.put('/influencer-bookmark-job/:id', authGuard, bookmarkJob);
+influencerRoute.get('/influencer-job-apply-history', authGuard, getApplyHistory);
+influencerRoute.get('/influencer-accepted-job-view', authGuard, getAcceptedJobs);
+influencerRoute.get('/influencer-rejected-job-view', authGuard, getRejectedJobs);
+influencerRoute.get('/influencer-bookmarked-jobs', authGuard, getBookmarkedJobs);
 
 
 

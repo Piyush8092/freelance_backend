@@ -1,105 +1,155 @@
-let jobModel = require('../../model/jobmodel');
+let ClientJobModel = require('../../../Model/clientJobModel');
+let InfluencerModel = require('../../../Model/InfluencerRegiestrationModel');
 
-const createJob = async (req, res) => {
-    try {       
-        let payload = req.body;
-        
-        // Validate all required fields
-        if ( !payload.title || !payload.yourNameBusinessInstituteFirmCompany || 
-            !payload.selectCategory || !payload.selectSubCategory || !payload.address || 
-             !payload.description || !payload.salaryFrom || 
-            !payload.salaryTo || !payload.salaryPer || !payload.requiredExperience || 
-            !payload.workShift || !payload.workMode || !payload.workType ||
-            payload.allowCallInApp === undefined  || 
-            payload.allowChat === undefined) {
-            return res.status(400).json({message: 'All required fields must be provided'});
-        }
-
-        // Validate array fields
-        if (!Array.isArray(payload.workShift) || payload.workShift.length === 0) {
-            return res.status(400).json({message: 'Work shift is required'});
-        }
-        if (!Array.isArray(payload.workMode) || payload.workMode.length === 0) {
-            return res.status(400).json({message: 'Work mode is required'});
-        }
-        if (!Array.isArray(payload.workType) || payload.workType.length === 0) {
-            return res.status(400).json({message: 'Work type is required'});
-        }
-
-        // Validate sub-category other field
-        if (payload.selectSubCategory === 'Other' && !payload.subCategoryOther) {
-            return res.status(400).json({message: 'Sub-category other field is required when Other is selected'});
-        }
-
-       
-
-        // Validate salary range
-        if (payload.salaryFrom >= payload.salaryTo) {
-            return res.status(400).json({message: 'Salary from must be less than salary to'});
-        }
-
-        // Validate enum values
-        const validSalaryPer = ['Per Month', 'Per Year', 'Per Day', 'Per Hour'];
-        if (!validSalaryPer.includes(payload.salaryPer)) {
-            return res.status(400).json({message: 'Invalid salary period'});
-        }
-
-        const validWorkShift = ['Day Shift', 'Night Shift'];
-        if (!payload.workShift.every(shift => validWorkShift.includes(shift))) {
-            return res.status(400).json({message: 'Invalid work shift value'});
-        }
-
-        const validWorkMode = ['On-site', 'Remote', 'Hybrid'];
-        if (!payload.workMode.every(mode => validWorkMode.includes(mode))) {
-            return res.status(400).json({message: 'Invalid work mode value'});
-        }
-
-        const validWorkType = ['Full-time', 'Part-time', 'Intern'];
-        if (!payload.workType.every(type => validWorkType.includes(type))) {
-            return res.status(400).json({message: 'Invalid work type value'});
-        }
-
+const applyJob = async (req, res) => {
+    try {
+        let jobId = req.params.id;
         let userId = req.user._id;
-        if (!userId) {
-            return res.status(400).json({message: 'User not authenticated'});
+        let { apply } = req.body;
+
+        // Authorization check - only influencers can apply for jobs
+        if (req.user.role !== 'influencer') {
+            return res.status(403).json({
+                message: 'Unauthorized access - Only influencers can apply for jobs',
+                status: 403,
+                success: false,
+                error: true
+            });
         }
 
-        payload.userId = userId;
-        payload.phoneNumberForCalls = req.user.phone;
-        payload.isVerified = true;
+        // Validate apply field
+        if (apply !== true) {
+            return res.status(400).json({
+                message: 'Apply field must be true to apply for job',
+                status: 400,
+                success: false,
+                error: true
+            });
+        }
 
-        const newJob = new jobModel(payload);
-        const result = await newJob.save();
+        // Check if user has phone number
+        if (!req.user.phone) {
+            return res.status(400).json({
+                message: 'Phone number is required to apply for jobs. Please update your profile.',
+                status: 400,
+                success: false,
+                error: true
+            });
+        }
+
+        // Check if influencer profile exists and is verified
+        let influencerProfile = await InfluencerModel.findOne({ userId: userId });
+        if (!influencerProfile) {
+            return res.status(400).json({
+                message: 'Influencer profile not found. Please create your influencer profile first.',
+                status: 400,
+                success: false,
+                error: true
+            });
+        }
+
+        let existingJob = await ClientJobModel.findById(jobId);
+        if (!existingJob) {
+            return res.status(404).json({
+                message: 'Job not found',
+                status: 404,
+                success: false,
+                error: true
+            });
+        }
+
+        // Check if job is active
+        if (!existingJob.isActive) {
+            return res.status(400).json({
+                message: 'This job is no longer active',
+                status: 400,
+                success: false,
+                error: true
+            });
+        }
+
+        // Check if user is trying to apply to their own job
+        if (existingJob.userId.toString() === userId.toString()) {
+            return res.status(400).json({
+                message: 'You cannot apply to your own job',
+                status: 400,
+                success: false,
+                error: true
+            });
+        }
+
+        // Check if user already applied
+        const alreadyApplied = existingJob.jobApplyId.some(application =>
+            application.userId.toString() === userId.toString() && application.apply === true
+        );
+        if (alreadyApplied) {
+            return res.status(400).json({
+                message: 'You have already applied for this job',
+                status: 400,
+                success: false,
+                error: true
+            });
+        }
+
+        // Check if user already accepted
+        const alreadyAccepted = existingJob.AcceptedId.some(accepted =>
+            accepted.userId.toString() === userId.toString() && accepted.accept === true
+        );
+        if (alreadyAccepted) {
+            return res.status(400).json({
+                message: 'You have already been accepted for this job',
+                status: 400,
+                success: false,
+                error: true
+            });
+        }
+
+        // Check if user already rejected
+        const alreadyRejected = existingJob.RejectedId.some(rejected =>
+            rejected.userId.toString() === userId.toString() && rejected.reject === true
+        );
+        if (alreadyRejected) {
+            return res.status(400).json({
+                message: 'You have been rejected for this job and cannot reapply',
+                status: 400,
+                success: false,
+                error: true
+            });
+        }
+
+        // Add user to job applications with correct structure
+        existingJob.jobApplyId.push({
+            apply: true,
+            userId: userId,
+            applyDate: new Date()
+        });
+
+        await existingJob.save();
+
+        // Populate the result for response
+        const populatedJob = await ClientJobModel.findById(jobId)
+            .populate('userId', 'name email phone country role')
+            .populate('jobApplyId.userId', 'name email phone country role')
+            .populate('AcceptedId.userId', 'name email phone country role')
+            .populate('RejectedId.userId', 'name email phone country role');
 
         res.json({
-            message: 'Job created successfully', 
-            status: 200, 
-            data: result, 
-            success: true, 
+            message: 'Job application submitted successfully',
+            status: 200,
+            data: populatedJob,
+            success: true,
             error: false
         });
 
     } catch (e) {
-        // Handle validation errors
-        if (e.name === 'ValidationError') {
-            const errors = Object.values(e.errors).map(err => err.message);
-            return res.status(400).json({
-                message: 'Validation failed', 
-                status: 400, 
-                data: errors, 
-                success: false, 
-                error: true
-            });
-        }
-        
-        res.json({
-            message: 'Something went wrong', 
-            status: 500, 
-            data: e.message, 
-            success: false, 
+        res.status(500).json({
+            message: 'Something went wrong',
+            status: 500,
+            data: e.message,
+            success: false,
             error: true
         });
     }
 };
 
-module.exports = { createJob };
+module.exports = { applyJob };

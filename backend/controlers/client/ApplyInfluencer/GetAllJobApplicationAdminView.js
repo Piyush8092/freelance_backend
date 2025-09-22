@@ -1,16 +1,19 @@
 let ClientJob = require('../../../Model/clientJobModel');
 
-const getAcceptJob = async (req, res) => {
+const getAllJobApplicationAdminView = async (req, res) => {
     try {  
-        let userId = req.user._id;
         let page = parseInt(req.query.page) || 1;
         let limit = parseInt(req.query.limit) || 10;
         const skip = (page - 1) * limit;
-if(req.user._id!==userId && req.user.role!=='ADMIN'){
-    return res.status(403).json({message: 'Unauthorized access'});
-}
-
-        const result = await ClientJob.find({RejectedId: userId})
+        if(req.user.role !== 'ADMIN'){
+            return res.status(403).json({
+                message: 'Unauthorized access - Only admins can view all job applications',
+                status: 403,
+                success: false,
+                error: true
+            });
+        }
+        const result = await ClientJob.find()
 
         .populate('userId', 'name email profileImage')
             .populate('bids.userId', 'name email profileImage')
@@ -20,7 +23,7 @@ if(req.user._id!==userId && req.user.role!=='ADMIN'){
             .skip(skip)
             .limit(limit)
             .sort({ createdAt: -1 });
-            const total = await ClientJob.countDocuments({AcceptedId: userId});
+            const total = await ClientJob.countDocuments();
             const totalPages = Math.ceil(total / limit);
 
         res.json({
@@ -45,6 +48,7 @@ if(req.user._id!==userId && req.user.role!=='ADMIN'){
     }
 };
 
-module.exports = { getAcceptJob };
+module.exports = { getAllJobApplicationAdminView };
+
 
 

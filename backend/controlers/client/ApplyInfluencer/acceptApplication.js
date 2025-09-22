@@ -4,6 +4,7 @@ const acceptApplication = async (req, res) => {
     try {       
         let id = req.params.id;
         let userId = req.user._id;
+        let payload = req.body;
         let ExistJob = await ClientJob.findById(id);
         if(!ExistJob.jobApplyId.includes(userId)) {
             return res.status(400).json({message: 'You have not applied for this job'});
@@ -19,6 +20,9 @@ const acceptApplication = async (req, res) => {
         }
         if (ExistJob.RejectedId.includes(userId)) {
             return res.status(400).json({message: 'You have already rejected for this job'});
+        }
+        if(payload.accept !== true) {
+            return res.status(400).json({message: 'Accept field must be true to accept application'});
         }
         ExistJob.AcceptedId.push(userId);
         await ExistJob.save();
