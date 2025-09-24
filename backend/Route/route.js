@@ -34,6 +34,7 @@ const { getAllUserFromUserModel } = require('../controlers/user/getAllUserFromUs
 const { getSpecificUserFromUserModel } = require('../controlers/user/getSpecificUserFromUserModel');
 const { getInfluencerUserDetail } = require('../controlers/user/getInfluencerUserDetail');
 const { getQueryUserFromUserModel } = require('../controlers/user/getQueryUserFromUserModel');
+const { getCampaignCreaterView } = require('../controlers/campaign/CampaignCreaterView');
  
 
 router.use(passport.initialize());
@@ -112,6 +113,8 @@ router.get('/get-specific-campaign/:id',getSpecificCampaign);
 router.get('/get-query-campaign',queryCampaigns);
 router.put('/update-campaign/:id',authGuard,updateCampaign);
 router.delete('/delete-campaign/:id',authGuard,deleteCampaign);
+router.get('/get-campaign-creater-view',authGuard,getCampaignCreaterView);
+
 
 
 
