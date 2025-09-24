@@ -4,8 +4,8 @@ const getAcceptJobClientView = async (req, res) => {
     try {
         let userId = req.user._id;
 
-        // Authorization check
-        if(req.user.role !== 'ADMIN' && req.user.role !== 'client'){
+        // Authorization check - only clients and admins can view accepted applications
+        if (req.user.role !== 'client' && req.user.role !== 'ADMIN') {
             return res.status(403).json({
                 message: 'Unauthorized access - Only clients and admins can view accepted applications',
                 status: 403,
@@ -20,17 +20,14 @@ const getAcceptJobClientView = async (req, res) => {
 
         // Query for jobs where:
         // 1. The current user is the job creator (userId matches)
-        // 2. The job has accepted applications (AcceptedId array has entries with accept: true)
+        // 2. The job has applications where JobApplyerAccept is true
         const result = await ClientJob.find({
-            userId: userId,
-            'AcceptedId.accept': true
+            $and: [
+                { 'jobApplyId.userId': userId },
+                { 'jobApplyId.JobApplyerAccept': true }
+            ]
         })
         .populate('userId', 'name email phone country role')
-        .populate('AcceptedId.userId', 'name email phone country role')
-        .populate('bids.userId', 'name email phone country role')
-        .populate('hires.userId', 'name email phone country role')
-        .populate('likes.userId', 'name email phone country role')
-        .populate('views.userId', 'name email phone country role')
         .populate('jobApplyId.userId', 'name email phone country role')
         .skip(skip)
         .limit(limit)
@@ -38,20 +35,36 @@ const getAcceptJobClientView = async (req, res) => {
 
         // Count total documents with the same criteria
         const total = await ClientJob.countDocuments({
-            userId: userId,
-            'AcceptedId.accept': true
+            $and: [
+                { userId: userId },
+                { 'jobApplyId.JobApplyerAccept': true }
+            ]
         });
         const totalPages = Math.ceil(total / limit);
 
+        // Filter to show only accepted applications for each job
+        const processedResult = result.map(job => {
+            const jobObj = job.toObject();
+            
+            // Filter jobApplyId to show only applications where JobApplyerAccept is true
+            jobObj.jobApplyId = jobObj.jobApplyId.filter(
+                application => application.JobApplyerAccept === true
+            );
+            
+            return jobObj;
+        });
+
         res.json({
-            message: 'Jobs retrieved successfully', 
+            message: 'Jobs with accepted applications retrieved successfully', 
             status: 200, 
-            data: result, 
+            data: processedResult, 
             success: true, 
             error: false, 
             total, 
             totalPages,
-            currentPage: page
+            currentPage: page,
+            hasNextPage: page < totalPages,
+            hasPrevPage: page > 1
         });
     }
     catch (e) {

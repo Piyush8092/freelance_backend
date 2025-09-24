@@ -23,9 +23,8 @@ const getRejectedJobs = async (req, res) => {
         // 2. The current user has been rejected (in RejectedId array with reject: true)
         const result = await ClientJob.find({
             'jobApplyId.userId': userId,
-            'jobApplyId.apply': true,
-            'RejectedId.userId': userId,
-            'RejectedId.reject': true
+            'jobApplyId.JobApplyerReject': true,
+             
         })
         .populate('userId', 'name email phone country role')
         .populate('jobApplyId.userId', 'name email phone country role')

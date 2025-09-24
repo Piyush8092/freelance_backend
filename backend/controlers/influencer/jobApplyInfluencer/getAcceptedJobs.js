@@ -23,9 +23,8 @@ const getAcceptedJobs = async (req, res) => {
         // 2. The current user has been accepted (in AcceptedId array with accept: true)
         const result = await ClientJob.find({
             'jobApplyId.userId': userId,
-            'jobApplyId.apply': true,
-            'AcceptedId.userId': userId,
-            'AcceptedId.accept': true
+            'jobApplyId.JobApplyerAccept': true,
+             
         })
         .populate('userId', 'name email phone country role')
         .populate('jobApplyId.userId', 'name email phone country role')

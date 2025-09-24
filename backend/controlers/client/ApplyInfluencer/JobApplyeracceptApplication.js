@@ -1,27 +1,16 @@
+
 let ClientJob = require('../../../Model/clientJobModel');
 
-const acceptApplication = async (req, res) => {
+const JobApplyeracceptApplication = async (req, res) => {
     try {       
         let jobId = req.params.jobId;
-        let index = parseInt(req.params.index);
         let userId = req.user._id;
-        let { JobCreaterAccept } = req.body;
+        let { JobApplyerAccept } = req.body;
         
-      
         // Validate accept field
-        if (JobCreaterAccept !== true) {
+        if (JobApplyerAccept !== true) {
             return res.status(400).json({
-                message: 'Accept field must be true to accept application',
-                status: 400,
-                success: false,
-                error: true
-            });
-        }
-        
-        // Validate index parameter
-        if (isNaN(index) || index < 0) {
-            return res.status(400).json({
-                message: 'Valid index is required',
+                message: 'JobApplyerAccept field must be true to accept application',
                 status: 400,
                 success: false,
                 error: true
@@ -39,16 +28,6 @@ const acceptApplication = async (req, res) => {
             });
         }
         
-        // Check if the current user is the job creator or admin
-        if (ExistJob.userId.toString() !== userId.toString() && req.user.role !== 'ADMIN') {
-            return res.status(403).json({
-                message: 'You can only accept applications for your own jobs',
-                status: 403,
-                success: false,
-                error: true
-            });
-        }
-        
         // Check if applications exist
         if (ExistJob.jobApplyId.length === 0) {
             return res.status(404).json({
@@ -59,43 +38,56 @@ const acceptApplication = async (req, res) => {
             });
         }
         
-        // Check if index is valid
-        if (index >= ExistJob.jobApplyId.length) {
+        // Find the application index for current user
+        const applicationIndex = ExistJob.jobApplyId.findIndex(
+            application => application.userId.toString() === userId.toString()
+        );
+        
+        if (applicationIndex === -1) {
             return res.status(404).json({
-                message: 'Application index not found',
+                message: 'You have not applied for this job',
                 status: 404,
                 success: false,
                 error: true
             });
         }
         
-        
-        // Check if already accepted
-        if (ExistJob.jobApplyId[index].JobCreaterAccept === true) {
+        // Check if already accepted by job applyer
+        if (ExistJob.jobApplyId[applicationIndex].JobApplyerAccept === true) {
             return res.status(400).json({
-                message: 'Application has already been accepted',
+                message: 'You have already accepted this job',
                 status: 400,
                 success: false,
                 error: true
             });
         }
         
-        // Check if already rejected
-        if (ExistJob.jobApplyId[index].JobCreaterReject === true) {
+        // Check if already rejected by job applyer
+        if (ExistJob.jobApplyId[applicationIndex].JobApplyerReject === true) {
             return res.status(400).json({
-                message: 'Application has already been rejected',
+                message: 'You have already rejected this job',
                 status: 400,
                 success: false,
                 error: true
             });
         }
         
-        // Accept the application
-        ExistJob.jobApplyId[index].JobCreaterAccept = true;
+        // Check if job creator has accepted the application first
+        if (ExistJob.jobApplyId[applicationIndex].JobCreaterAccept !== true) {
+            return res.status(400).json({
+                message: 'Job creator must accept your application first',
+                status: 400,
+                success: false,
+                error: true
+            });
+        }
+        
+        // Accept the application as job applyer
+        ExistJob.jobApplyId[applicationIndex].JobApplyerAccept = true;
         await ExistJob.save();
 
         res.json({
-            message: 'Application accepted successfully', 
+            message: 'Job accepted successfully by applicant', 
             status: 200, 
             data: ExistJob, 
             success: true, 
@@ -104,7 +96,7 @@ const acceptApplication = async (req, res) => {
 
     }
     catch (e) {
-        res.status(500).json({
+        res.json({
             message: 'Something went wrong', 
             status: 500, 
             data: e.message, 
@@ -114,6 +106,5 @@ const acceptApplication = async (req, res) => {
     }
 };
 
-module.exports = { acceptApplication };
-
+module.exports = { JobApplyeracceptApplication };
 

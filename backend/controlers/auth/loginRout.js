@@ -35,7 +35,7 @@ const LoginRout = async (req, res) => {
         }
         
         let token = jwt.sign({id: existingUser._id}, process.env.SECRET_KEY ||'me333enneffiimsqoqomcngfehdj3idss', {expiresIn: '7d'});
-        res.cookie('jwt', token, {httpOnly: true, maxAge: 1000*60*60*24});
+        res.cookie('jwt', token, {httpOnly: true, maxAge: 1000*60*60*24*365});
 existingUser.token=token;
         res.json({ message: 'Login successful', status: 200, data: existingUser, success: true, error: false });
     } catch (e) {

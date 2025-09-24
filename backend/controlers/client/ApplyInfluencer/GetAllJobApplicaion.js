@@ -9,7 +9,7 @@ const getAllJobApplication = async (req, res) => {
         let page = parseInt(req.query.page) || 1;
         let limit = parseInt(req.query.limit) || 10;
         const skip = (page - 1) * limit;
-        const result = await ClientJob.find({jobApplyId: userId})
+        const result = await ClientJob.find({"jobApplyId.userId": userId})
 
         .populate('userId', 'name email profileImage')
             .populate('bids.userId', 'name email profileImage')

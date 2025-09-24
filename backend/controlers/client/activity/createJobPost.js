@@ -27,13 +27,10 @@ const createJob = async (req, res) => {
         if (payload.allowCallViaPhone === true && !payload.phoneNumberForCalls && !req.user.phone) {
             return res.status(400).json({message: 'Phone number is required when call via phone is enabled'});
         }
+ 
 
-        let userId = req.user._id;
-        if (!userId) {
-            return res.status(400).json({message: 'User not authenticated'});
-        }
-
-        payload.userId = userId;
+        payload.userId = req.user._id;
+        console.log(req.user)
         if (!payload.phoneNumberForCalls && req.user.phone) {
             payload.phoneNumberForCalls = req.user.phone;
         }

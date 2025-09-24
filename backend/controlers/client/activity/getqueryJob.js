@@ -30,7 +30,7 @@ const queryJobs = async (req, res) => {
             .populate('userId', 'name email profileImage')
             .populate('bids.userId', 'name email profileImage')
             .populate('hires.userId', 'name email profileImage')
-            .populate('likes.userId', 'name email')
+            .populate('bookmarks.userId', 'name email')
             .populate('views.userId', 'name email')
             .skip(skip)
             .limit(limit)

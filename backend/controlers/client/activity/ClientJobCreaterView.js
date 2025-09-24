@@ -1,26 +1,27 @@
 let ClientJob = require('../../../Model/clientJobModel');
 
-const getAllJob = async (req, res) => {
+const getJobCreaterView = async (req, res) => {
     try {  
+        let userId = req.user._id;
         let page = parseInt(req.query.page) || 1;
         let limit = parseInt(req.query.limit) || 10;
         const skip = (page - 1) * limit;
-        
-        const result = await ClientJob.find()
+        console.log(userId);
+        const result = await ClientJob.find({userId: userId})
             .populate('userId', 'name email profileImage')
             .populate('bids.userId', 'name email profileImage')
             .populate('hires.userId', 'name email profileImage')
-            .populate('likes.userId', 'name email')
+            .populate('bookmarks.userId', 'name email')
             .populate('views.userId', 'name email')
             .skip(skip)
             .limit(limit)
             .sort({ createdAt: -1 });
             
-        const total = await ClientJob.countDocuments();
+        const total = await ClientJob.countDocuments({userId: userId});
         const totalPages = Math.ceil(total / limit);
 
         res.json({
-            message: 'Jobs retrieved successfully', 
+            message: 'Client jobs retrieved successfully', 
             status: 200, 
             data: result, 
             success: true, 
@@ -40,4 +41,4 @@ const getAllJob = async (req, res) => {
     }
 };
 
-module.exports = { getAllJob };
+module.exports = { getJobCreaterView };

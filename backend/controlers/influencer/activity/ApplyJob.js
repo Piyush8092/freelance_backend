@@ -1,3 +1,4 @@
+const e = require('express');
 let ClientJobModel = require('../../../Model/clientJobModel');
 let InfluencerModel = require('../../../Model/InfluencerRegiestrationModel');
 
@@ -8,14 +9,14 @@ const applyJob = async (req, res) => {
         let { apply } = req.body;
 
         // Authorization check - only influencers can apply for jobs
-        if (req.user.role !== 'influencer') {
-            return res.status(403).json({
-                message: 'Unauthorized access - Only influencers can apply for jobs',
-                status: 403,
-                success: false,
-                error: true
-            });
-        }
+        // if (req.user.role !== 'influencer') {
+        //     return res.status(403).json({
+        //         message: 'Unauthorized access - Only influencers can apply for jobs',
+        //         status: 403,
+        //         success: false,
+        //         error: true
+        //     });
+        // }
 
         // Validate apply field
         if (apply !== true) {
@@ -38,17 +39,22 @@ const applyJob = async (req, res) => {
         }
 
         // Check if influencer profile exists and is verified
-        let influencerProfile = await InfluencerModel.findOne({ userId: userId });
-        if (!influencerProfile) {
-            return res.status(400).json({
-                message: 'Influencer profile not found. Please create your influencer profile first.',
-                status: 400,
-                success: false,
-                error: true
-            });
+        let ExistProfile = await InfluencerModel.findOne({ userId: userId });
+        if (!ExistProfile ) {
+            ExistProfile=await ClientJobModel.findOne({userId:userId});
+            if(!ExistProfile && req.user.role!=='ADMIN'){
+                return res.status(400).json({
+                    message: 'Client profile not found. Please create your client profile first.',
+                    status: 400,
+                    success: false,
+                    error: true
+                });
+            }
+           
         }
 
         let existingJob = await ClientJobModel.findById(jobId);
+        // console.log(existingJob);
         if (!existingJob) {
             return res.status(404).json({
                 message: 'Job not found',

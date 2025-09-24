@@ -40,17 +40,14 @@ influencerRoute.get('/get-influencer-query',queryInfluencers);
 influencerRoute.get('/get-specific-influencer/:id',getSpecificInfulencer);
 influencerRoute.get('/get-all-influencer',getAllInfluencer);
 // // update followers
-influencerRoute.put('/update-followers/:id',authGuard,updateFollowers);
-influencerRoute.put('/update-following/:id',authGuard,updateFolloweing);
+influencerRoute.put('/update-followers/:id',authGuard,updateFollowers); // send follow=true
+influencerRoute.put('/update-following/:id',authGuard,updateFolloweing); // send following=true
 influencerRoute.get('/get-all-follower/:id',authGuard,getAllFollower);
 influencerRoute.get('/get-all-following/:id',authGuard,getAllFolloweing);
 
-     
 
 
- 
- 
- 
+
 // influencer create post request
 influencerRoute.post('/create-influencer-post',authGuard,createInfluencerPost);
 influencerRoute.get('/get-specific-influencer-post/:id',getSpecificInfluencerPost);
@@ -66,23 +63,20 @@ influencerRoute.put('/like-influencer-post/:id', authGuard, updateLikeInfluencer
 influencerRoute.put('/dislike-influencer-post/:id', authGuard, updateDislikeInfluencerPost); //send dislike=true
 
 // Comment routes for influencer posts
-influencerRoute.put('/comment-influencer-post/:id', authGuard, addCommentInfluencerPost);
+influencerRoute.put('/comment-influencer-post/:id', authGuard, addCommentInfluencerPost); // send comment
 influencerRoute.delete('/delete-comment-influencer-post/:id/:commentId', authGuard, deleteCommentInfluencerPost);
+
+
+
 
 // Job application routes
 influencerRoute.put('/influencer-apply-job/:id', authGuard, applyJob);
-influencerRoute.put('/influencer-withdraw-application/:id', authGuard, withdrawApplication);
+influencerRoute.put('/influencer-withdraw-application/:id', authGuard, withdrawApplication); // send applicantUserId witddr
 influencerRoute.put('/influencer-bookmark-job/:id', authGuard, bookmarkJob);
 influencerRoute.get('/influencer-job-apply-history', authGuard, getApplyHistory);
 influencerRoute.get('/influencer-accepted-job-view', authGuard, getAcceptedJobs);
 influencerRoute.get('/influencer-rejected-job-view', authGuard, getRejectedJobs);
 influencerRoute.get('/influencer-bookmarked-jobs', authGuard, getBookmarkedJobs);
 
-
-
-
-
-
- 
 
  module.exports=influencerRoute;

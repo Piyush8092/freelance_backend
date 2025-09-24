@@ -7,7 +7,7 @@ const getSpecificJob = async (req, res) => {
             .populate('userId', 'name email profileImage phone')
             .populate('bids.userId', 'name email profileImage')
             .populate('hires.userId', 'name email profileImage')
-            .populate('likes.userId', 'name email')
+            .populate('bookmarks.userId', 'name email')
             .populate('views.userId', 'name email');
             
         if(!result){

@@ -13,12 +13,13 @@ const changeUserRole = async (req, res) => {
 
         // Authorization: only ADMIN can change role
         let UserRole = req.user.role;
+        // console.log(UserRole);
         if (UserRole !== 'ADMIN') {
             return res.status(403).json({ message: 'Unauthorized access' });
         }
 
         // Update user role in userModel
-    let result=    await userModel.findByIdAndUpdate(id, { role: newRole }, { new: true });
+    let result= await userModel.findByIdAndUpdate(id, { role: newRole }, { new: true });
 
        
         res.json({

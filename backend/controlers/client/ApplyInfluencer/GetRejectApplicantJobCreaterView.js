@@ -22,8 +22,9 @@ const getRejectJobJobCreaterView = async (req, res) => {
         // 1. The current user is the job creator (userId matches)
         // 2. The job has rejected applications (RejectedId array has entries with reject: true)
         const result = await ClientJob.find({
-            userId: userId,
-            'RejectedId.reject': true
+ $and:[
+                {' jobApplyId.userId': userId },
+{ 'jobApplyId.JobApplyerReject': true }]            
         })
         .populate('userId', 'name email phone country role')
         .populate('RejectedId.userId', 'name email phone country role')
@@ -31,7 +32,7 @@ const getRejectJobJobCreaterView = async (req, res) => {
         .populate('AcceptedId.userId', 'name email phone country role')
         .populate('bids.userId', 'name email phone country role')
         .populate('hires.userId', 'name email phone country role')
-        .populate('likes.userId', 'name email phone country role')
+        .populate('bookmarks.userId', 'name email phone country role')
         .populate('views.userId', 'name email phone country role')
         .skip(skip)
         .limit(limit)

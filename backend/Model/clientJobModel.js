@@ -134,33 +134,28 @@ const jobSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'user',
         },
+        JobCreaterAccept:{
+            type: Boolean,
+            default: false,
+        },
+        JobApplyerAccept:{
+            type: Boolean,
+            default: false,
+        },
+        JobCreaterReject:{
+            type: Boolean,
+            default: false,
+        },
+         JobApplyerReject:{
+            type: Boolean,
+            default: false,
+        },
         applyDate: {
             type: Date,
             default: Date.now,
         }
     }],
-    AcceptedId: [{
-        accept:{
-            type: Boolean,
-            default: false,
-        },
-        userId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'user',
-        },
-    }],
-         
-    RejectedId: [{
-        reject:{
-            type: Boolean,
-            default: false,
-        },
-        userId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'user',
-        },
-    }],
-         
+     
     
     // Status
     isActive: {
