@@ -6,9 +6,7 @@ const createJob = async (req, res) => {
         
         // Validate all required fields
         if (!payload.title || !payload.selectCategory || !payload.description || 
-            !payload.budgetFrom || !payload.budgetTo || !payload.projectDuration ||
-            payload.allowCallInApp === undefined || payload.allowCallViaPhone === undefined ||
-            payload.allowChat === undefined) {
+            !payload.budgetFrom || !payload.budgetTo || !payload.projectDuration ) {
             return res.status(400).json({message: 'All required fields must be provided'});
         }
 

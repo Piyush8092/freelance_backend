@@ -39,7 +39,7 @@ influencerRoute.delete('/delete-influencer/:id',authGuard,DeleteSpecificInfluenc
 influencerRoute.get('/get-influencer-query',queryInfluencers);
 influencerRoute.get('/get-specific-influencer/:id',getSpecificInfulencer);
 influencerRoute.get('/get-all-influencer',getAllInfluencer);
-// // update followers
+// // update followers 
 influencerRoute.put('/update-followers/:id',authGuard,updateFollowers); // send follow=true
 influencerRoute.put('/update-following/:id',authGuard,updateFolloweing); // send following=true
 influencerRoute.get('/get-all-follower/:id',authGuard,getAllFollower);

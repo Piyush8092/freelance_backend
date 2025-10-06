@@ -50,7 +50,7 @@ router.post('/login',LoginRout);
 router.post('/change-password',ChangePassword);
 router.get('/logout',LogoutRout);
 router.put('/change-password/:id',authGuard,ChangePassword);
-
+ 
 // for google signup/login
  // for jwt tokon integression with google auth20
 router.get('/auth/google',

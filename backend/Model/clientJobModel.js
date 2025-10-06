@@ -41,27 +41,14 @@ const jobSchema = new mongoose.Schema({
     },
     
     // Contact & Communication (from client model)
-    allowCallInApp: {
-        type: Boolean,
-        default: false,
-        required: [true, 'Allow call in app preference is required'],
-    },
-    allowCallViaPhone: {
-        type: Boolean,
-        default: false,
-        required: [true, 'Allow call via phone preference is required'],
-    },
+  
     phoneNumberForCalls: {
         type: String,
         required: function() {
             return this.allowCallViaPhone === true;
         },
     },
-    allowChat: {
-        type: Boolean,
-        default: false,
-        required: [true, 'Allow chat preference is required'],
-    },
+    
     
     // User Reference (from client model)
     userId: {
