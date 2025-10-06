@@ -1,24 +1,26 @@
-let influencerModel = require('../../Model/InfluencerRegiestrationModel');
-let clientModel = require('../../Model/clientRegistrationModel');
+const ClientRegistrationModel = require("../../Model/clientRegistrationModel");
+const InfluencerRegiestrationModel = require("../../Model/InfluencerRegiestrationModel");
 
+ 
 
 const getSpecificUserDetail = async (req, res) => {
     try {  
-        let userId=req.params.id;
-            let loginUserId=req.user._id;
-      if (!loginUserId) {
+             let loginUserId=req.user._id;
+            //  console.log(req.user);
+       if (!loginUserId) {
     return res.json({message: 'No data found', status: 400, data: {}, success: false, error: true});
 }
 
-let ExistUser = await clientModel.findById(userId);
-if (!ExistUser) {
-    ExistUser = await influencerModel.findById(userId);
-}
-if (!ExistUser) {
+let resultArray=[];
+
+let ExistUser = await ClientRegistrationModel.find({userId: loginUserId}).populate('userId', 'name email phone country role');
+ resultArray=[...resultArray,...ExistUser];
+    ExistUser = await InfluencerRegiestrationModel.find({userId: loginUserId});
+resultArray=[...resultArray,...ExistUser];
+if (!resultArray.length===0) {
     return res.json({message: 'No data found', status: 400, data: {}, success: false, error: true});
 }
-let result = ExistUser;
-        res.json({message: 'User detail retrieved successfully', status: 200, data: result, success: true, error: false});
+         res.json({message: 'User detail retrieved successfully', status: 200, data: resultArray, success: true, error: false});
     }
         catch (e) {
             res.json({message: 'Something went wrong', status: 500, data: e, success: false, error: true});

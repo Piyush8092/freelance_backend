@@ -14,8 +14,8 @@ const getClientUserDetail = async (req, res) => {
      let limit = parseInt(req.query.limit) || 10;
      const skip = (page - 1) * limit;
 
-     let clientUser=await clientModel.find().skip(skip).limit(limit);
-    let total = await clientModel.countDocuments({role:'client'});
+     let clientUser=await clientModel.find({userId: userId}).skip(skip).limit(limit).polopulate('userId', 'name email phone country role');
+    let total = await clientModel.countDocuments({profileType:'client'});
     let totalPages = Math.ceil(total / limit);
     
     res.json({message: 'User detail retrieved successfully', status: 200, data: clientUser, success: true, error: false, total, totalPages});

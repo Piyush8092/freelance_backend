@@ -96,7 +96,7 @@ router.get('/auth/google/callback',
 // user detail
 router.get('/get-client-user-detail',authGuard,getClientUserDetail);
 router.get('/get-influencer-user-detail',authGuard,getInfluencerUserDetail);
- router.get('/get-specific-service-user-detail/:id',authGuard,getSpecificUserDetail);
+ router.get('/get-specific-service-user-detail',authGuard,getSpecificUserDetail);
 
 // for admin access and role change
 router.put('/change-role-usermodel/:id',authGuard,changeUserRole);

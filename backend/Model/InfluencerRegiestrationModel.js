@@ -15,7 +15,7 @@ default:'influencer'
         type: String,
         // required: [true, 'Your name is required'],
     },
-  
+ 
    
     
     locationURL: {
@@ -32,17 +32,13 @@ default:'influencer'
     // Business/Service Details
     description: {
         type: String,
-        required: function() {
-            return this.profileType === 'Service Profile';
-        },
+        required:  [true, 'Description is required'],
     },
   
     
     experience: {
         type: String,
-        required: function() {
-            return this.profileType === 'Service Profile';
-        },
+        required:  [true, 'Experience is required'],
     },
     
    

@@ -14,8 +14,8 @@ const getInfluencerUserDetail = async (req, res) => {
      let limit = parseInt(req.query.limit) || 10;
      const skip = (page - 1) * limit;
 
-     let clientUser=await influencerModel.find().skip(skip).limit(limit);
-    let total = await influencerModel.countDocuments({role:'client'});
+     let clientUser=await influencerModel.find({userId: userId}).skip(skip).limit(limit).populate('userId', 'name email phone country role');
+    let total = await influencerModel.countDocuments({profileType:'influencer'});
     let totalPages = Math.ceil(total / limit);
     
     res.json({message: 'User detail retrieved successfully', status: 200, data: clientUser, success: true, error: false, total, totalPages});

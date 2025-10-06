@@ -22,19 +22,7 @@ if(existClient){
         .json({ message: "All required fields must be provided" });
     }
 
-    // --- Conditional validation for Service Profile ---
-    if (payload.profileType === "Service Profile") {
-      if (!payload.description) {
-        return res
-          .status(400)
-          .json({ message: "Description is required for Service Profile" });
-      }
-      if (!payload.experience) {
-        return res
-          .status(400)
-          .json({ message: "Experience is required for Service Profile" });
-      }
-    }
+ 
 
     // --- Attach user info from authGuard ---
     payload.userId = req.user._id;

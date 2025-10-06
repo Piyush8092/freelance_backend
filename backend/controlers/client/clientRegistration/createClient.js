@@ -24,31 +24,15 @@ if(existClient){
     }
 
     // --- Conditional validation based on profile type ---
-    if (payload.profileType === "Service Profile") {
-      if (!payload.description) {
-        return res
-          .status(400)
-          .json({ message: "Description is required for Service Profile" });
-      }
-    }
+    
 
-    if (payload.profileType === "Business Profile") {
-      if (!payload.businessName) {
-        return res
-          .status(400)
-          .json({ message: "Business name is required for Business Profile" });
-      }
-      if (!payload.establishedInYear) {
-        return res
-          .status(400)
-          .json({ message: "Established in year is required for Business Profile" });
-      }
+    
       if (!payload.workBusinessImages || payload.workBusinessImages.length === 0) {
         return res
           .status(400)
           .json({ message: "Work/Business images are required for Business Profile" });
       }
-    }
+    
 
     // --- Validate phone number when call via phone is enabled ---
     if (payload.allowCallViaPhone === true && !payload.phoneNumberForCalls) {
@@ -59,7 +43,7 @@ if(existClient){
 
     // --- Attach user info from authGuard ---
     payload.userId = req.user._id;
-    if (!payload.email) {
+     if (!payload.email) {
       payload.email = req.user.email;
     }
     if (!payload.name) {

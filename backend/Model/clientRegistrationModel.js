@@ -37,16 +37,12 @@ const profileSchema = new mongoose.Schema({
     // Business/Service Details
     description: {
         type: String,
-        required: function() {
-            return this.profileType === 'Service Profile';
-        },
+        required:  [true, 'Description is required'],
     },
   
     establishedInYear: {
         type: String,
-        required: function() {
-            return this.profileType === 'Business Profile';
-        },
+        required:  [true, 'Established in year is required'],
     },
    
     email: {
@@ -59,6 +55,8 @@ const profileSchema = new mongoose.Schema({
             message: 'Please enter a valid email'
         }
     },
+    
+   
     
     // Contact & Communication
     allowCallInApp: {
@@ -86,16 +84,16 @@ const profileSchema = new mongoose.Schema({
  
     workBusinessImages: {
         type: [String],
-        required: function() {
-            return this.profileType === 'Business Profile';
-        },
+        required: [true, 'Work/Business images are required'],
         validate: {
             validator: function(v) {
-                return this.profileType !== 'Business Profile' || (v && v.length > 0);
+                return this.profileType === 'client' ? (v && v.length > 0) : true;
             },
             message: 'Work/Business images are required for Business Profile'
         }
     },
+    
+
     
     // User Reference
     userId: {
