@@ -141,7 +141,7 @@ router.delete('/delete-terms-and-conditions/:id',authGuard,deleteTermsAndConditi
 router.get('/get-specific-terms-and-conditions/:id',getSpecificTermsAndConditions);
 
 //contact us
-router.post('/create-contact',createContact);
+router.post('/create-contact',authGuard,createContact);
 router.get('/get-contact',getContact);
 router.put('/update-contact/:id',authGuard,updateContact);
 router.delete('/delete-contact/:id',authGuard,deleteContact);

@@ -5,9 +5,13 @@ const ContactModel = require("../../Model/contactModel");
 const createContact=async(req,res)=>{
     try{
 let payload=req.body;
-if(!payload.name || !payload.email || !payload.subject || !payload.message){
+if(!payload.subject || !payload.message){
     return res.status(400).json({message: 'All fields are required'});
 }
+ 
+payload.userId=req.user._id;
+payload.name=req.user.name;
+payload.email=req.user.email;
 const newContact=new ContactModel(payload);
 const result=await newContact.save();
 res.json({message: 'Contact created successfully', status: 200, data: result, success: true, error: false});

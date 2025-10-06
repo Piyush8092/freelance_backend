@@ -6,7 +6,7 @@ const getContact=async(req,res)=>{
         let limit= req.query.limit || 10;
         const skip = (page - 1) * limit;
         
-        const result=await contactModel.find().skip(skip).limit(parseInt(limit));
+        const result=await contactModel.find().skip(skip).limit(parseInt(limit)).populate('userId', 'name email');
         const total = await contactModel.countDocuments();
         const totalPages = Math.ceil(total / limit);
         
