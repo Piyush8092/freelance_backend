@@ -35,6 +35,12 @@ const { getSpecificUserFromUserModel } = require('../controlers/user/getSpecific
 const { getInfluencerUserDetail } = require('../controlers/user/getInfluencerUserDetail');
 const { getQueryUserFromUserModel } = require('../controlers/user/getQueryUserFromUserModel');
 const { getCampaignCreaterView } = require('../controlers/campaign/CampaignCreaterView');
+const { createContact } = require('../controlers/contact/createContact');
+const { getContact } = require('../controlers/contact/getContactData');
+const { getSpecificContact } = require('../controlers/contact/getSpecificContact');
+const { deleteContact } = require('../controlers/contact/DeleteContact');
+const { updateContact } = require('../controlers/contact/updateContact');
+const { queryContact } = require('../controlers/contact/queryContact');
  
 
 router.use(passport.initialize());
@@ -133,5 +139,15 @@ router.get('/get-terms-and-conditions',getTermsAndConditions);
 router.put('/edit-terms-and-conditions/:id',authGuard,editTermsAndConditions);
 router.delete('/delete-terms-and-conditions/:id',authGuard,deleteTermsAndConditions);
 router.get('/get-specific-terms-and-conditions/:id',getSpecificTermsAndConditions);
+
+//contact us
+router.post('/create-contact',createContact);
+router.get('/get-contact',getContact);
+router.put('/update-contact/:id',authGuard,updateContact);
+router.delete('/delete-contact/:id',authGuard,deleteContact);
+router.get('/get-specific-contact/:id',getSpecificContact);
+router.get('/get-query-contact',queryContact);
+
+
 
 module.exports=router;
