@@ -3,7 +3,7 @@ const contactModel = require("../../Model/contactModel");
 const getSpecificContact=async(req,res)=>{
     try{
        let id=req.params.id;
-        let result=await contactModel.findById({_id:id});   
+        let result=await contactModel.findById({_id:id}).populate('userId', 'name email');   
         if(!result){
             res.json({message: 'No data found', status: 400, data: {}, success: false, error: true});
         }

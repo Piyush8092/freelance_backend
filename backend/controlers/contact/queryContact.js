@@ -22,7 +22,7 @@ const queryContact = async (req, res) => {
             ]
         };
         
-        const result = await contactModel.find(searchQuery).skip(skip).limit(parseInt(limit));
+        const result = await contactModel.find(searchQuery).skip(skip).limit(parseInt(limit).populate('userId', 'name email'));
         const total = await contactModel.countDocuments(searchQuery);
         const totalPages = Math.ceil(total / limit);
         
