@@ -64,8 +64,8 @@ router.get('/auth/google',
 
 // this req send frontend rouet => this route call from utiles/googleAuth.js automatic
  
-router.get('/auth/google/callback', 
-  passport.authenticate('google', { session: false, failureRedirect: 'http://localhost:3000/login' }),
+router.get('/auth/google/callback',
+  passport.authenticate('google', { session: false, failureRedirect: 'https://freelance-backend-v51r.onrender.com/login' }),
   (req, res) => {
           const user = req.user;
 
@@ -80,7 +80,7 @@ router.get('/auth/google/callback',
     });
 
     // // Redirect to frontend
-    res.redirect('http://localhost:3000/home');
+    res.redirect('https://freelance-backend-v51r.onrender.com/home');
   }
 );
 

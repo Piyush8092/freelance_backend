@@ -9,6 +9,7 @@ const cors = require('cors');
 const passport = require('passport');
 const influencerRoute = require('./Route/influncerRoute');
 const clientRoute = require('./Route/clientRoute');
+const adminRoute = require('./Route/adminRoute');
  
 
 
@@ -18,7 +19,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(cookieParser());
 app.use(cors({
-  origin: "*", // allow all domains
+  origin: ["http://localhost:5173","https://localhost:5173","*"], // allow all domains
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"], // allow all HTTP methods
   allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"], // allow common headers
@@ -28,6 +29,7 @@ app.use(cors({
 app.use('/api',router);
 app.use('/api',influencerRoute);
 app.use('/api',clientRoute);
+app.use('/api',adminRoute);
 
  connectDB();
 app.listen(port,()=>{
