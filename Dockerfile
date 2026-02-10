@@ -2,15 +2,17 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# Copy backend package files
-COPY backend/package*.json ./
+# Copy ROOT package.json
+COPY package*.json ./
 
-# Install only production dependencies
-RUN npm install --production
+RUN npm install --omit=dev
 
-# Copy backend source code
-COPY backend .
+# Copy everything
+COPY . .
+
+# Go into backend folder (where index.js lives)
+WORKDIR /app/backend
 
 EXPOSE 3000
 
-CMD ["npm", "start"]
+CMD ["node", "index.js"]
