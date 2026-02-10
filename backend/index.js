@@ -13,7 +13,7 @@ const adminRoute = require('./Route/adminRoute');
  
 
 
- app.use(passport.initialize());
+ app.use(passport.initialize());  
 
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
